@@ -1,0 +1,1 @@
+/usr/bin/g++  -g   CMakeFiles/CertificationAuthority.dir/CertificationAuthority.cpp.o  -o CertificationAuthority  libCryptoLib.a -lsodium 

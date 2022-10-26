@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblib_wssl.a CMakeFiles/lib_wssl.dir/src/safety_entity_send.cpp.o CMakeFiles/lib_wssl.dir/src/safety_entity_rcv.cpp.o
+/usr/bin/ranlib liblib_wssl.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libCryptoLib.a  CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.o
+/usr/bin/ranlib libCryptoLib.a

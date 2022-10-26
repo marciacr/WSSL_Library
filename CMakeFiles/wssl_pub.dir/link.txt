@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/wssl_pub.dir/publisher.cpp.o  -o wssl_pub  libwssl.a libCryptoLib.a -lsodium -lmosquitto 

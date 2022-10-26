@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CertificationAuthority.cpp
+iostream
+-
+sys/stat.h
+-
+CryptoIdentity.h
+/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CryptoIdentity.h
+
+src/CryptoIdentity.h
+map
+-
+string
+-
+vector
+-
+sodium/crypto_box.h
+-
+sodium/crypto_sign.h
+-
+

@@ -1,32 +1,32 @@
 [
 {
-  "directory": "/home/marcia/wssl/WSSL_Security&Safety/build",
-  "command": "/usr/bin/g++ -g -std=gnu++2a -o CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.o -c \"/home/marcia/wssl/WSSL_Security&Safety/src/CryptoIdentity.cpp\"",
-  "file": "/home/marcia/wssl/WSSL_Security&Safety/src/CryptoIdentity.cpp"
+  "directory": "/home/marcia/Desktop/WSSL_Library/build",
+  "command": "/usr/bin/g++   -I/home/marcia/Desktop/WSSL_Library/src  -g   -std=gnu++2a -o CMakeFiles/wssl_sub.dir/subscriber.cpp.o -c /home/marcia/Desktop/WSSL_Library/subscriber.cpp",
+  "file": "/home/marcia/Desktop/WSSL_Library/subscriber.cpp"
 },
 {
-  "directory": "/home/marcia/wssl/WSSL_Security&Safety/build",
-  "command": "/usr/bin/g++ -g -std=gnu++2a -o CMakeFiles/wssl.dir/src/safety_entity_send.cpp.o -c \"/home/marcia/wssl/WSSL_Security&Safety/src/safety_entity_send.cpp\"",
-  "file": "/home/marcia/wssl/WSSL_Security&Safety/src/safety_entity_send.cpp"
+  "directory": "/home/marcia/Desktop/WSSL_Library/build",
+  "command": "/usr/bin/g++   -I/home/marcia/Desktop/WSSL_Library/src  -g   -std=gnu++2a -o CMakeFiles/wssl_pub.dir/publisher.cpp.o -c /home/marcia/Desktop/WSSL_Library/publisher.cpp",
+  "file": "/home/marcia/Desktop/WSSL_Library/publisher.cpp"
 },
 {
-  "directory": "/home/marcia/wssl/WSSL_Security&Safety/build",
-  "command": "/usr/bin/g++ -g -std=gnu++2a -o CMakeFiles/wssl.dir/src/safety_entity_rcv.cpp.o -c \"/home/marcia/wssl/WSSL_Security&Safety/src/safety_entity_rcv.cpp\"",
-  "file": "/home/marcia/wssl/WSSL_Security&Safety/src/safety_entity_rcv.cpp"
+  "directory": "/home/marcia/Desktop/WSSL_Library/build",
+  "command": "/usr/bin/g++    -g   -std=gnu++2a -o CMakeFiles/wssl.dir/src/safety_entity_send.cpp.o -c /home/marcia/Desktop/WSSL_Library/src/safety_entity_send.cpp",
+  "file": "/home/marcia/Desktop/WSSL_Library/src/safety_entity_send.cpp"
 },
 {
-  "directory": "/home/marcia/wssl/WSSL_Security&Safety/build",
-  "command": "/usr/bin/g++ -I\"/home/marcia/wssl/WSSL_Security&Safety/src\" -g -std=gnu++2a -o CMakeFiles/CertificationAuthority.dir/CertificationAuthority.cpp.o -c \"/home/marcia/wssl/WSSL_Security&Safety/CertificationAuthority.cpp\"",
-  "file": "/home/marcia/wssl/WSSL_Security&Safety/CertificationAuthority.cpp"
+  "directory": "/home/marcia/Desktop/WSSL_Library/build",
+  "command": "/usr/bin/g++    -g   -std=gnu++2a -o CMakeFiles/wssl.dir/src/safety_entity_rcv.cpp.o -c /home/marcia/Desktop/WSSL_Library/src/safety_entity_rcv.cpp",
+  "file": "/home/marcia/Desktop/WSSL_Library/src/safety_entity_rcv.cpp"
 },
 {
-  "directory": "/home/marcia/wssl/WSSL_Security&Safety/build",
-  "command": "/usr/bin/g++ -I\"/home/marcia/wssl/WSSL_Security&Safety/src\" -g -std=gnu++2a -o CMakeFiles/wssl_pub.dir/publisher.cpp.o -c \"/home/marcia/wssl/WSSL_Security&Safety/publisher.cpp\"",
-  "file": "/home/marcia/wssl/WSSL_Security&Safety/publisher.cpp"
+  "directory": "/home/marcia/Desktop/WSSL_Library/build",
+  "command": "/usr/bin/g++   -I/home/marcia/Desktop/WSSL_Library/src  -g   -std=gnu++2a -o CMakeFiles/CertificationAuthority.dir/CertificationAuthority.cpp.o -c /home/marcia/Desktop/WSSL_Library/CertificationAuthority.cpp",
+  "file": "/home/marcia/Desktop/WSSL_Library/CertificationAuthority.cpp"
 },
 {
-  "directory": "/home/marcia/wssl/WSSL_Security&Safety/build",
-  "command": "/usr/bin/g++ -I\"/home/marcia/wssl/WSSL_Security&Safety/src\" -g -std=gnu++2a -o CMakeFiles/wssl_sub.dir/subscriber.cpp.o -c \"/home/marcia/wssl/WSSL_Security&Safety/subscriber.cpp\"",
-  "file": "/home/marcia/wssl/WSSL_Security&Safety/subscriber.cpp"
+  "directory": "/home/marcia/Desktop/WSSL_Library/build",
+  "command": "/usr/bin/g++    -g   -std=gnu++2a -o CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.o -c /home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.cpp",
+  "file": "/home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.cpp"
 }
 ]

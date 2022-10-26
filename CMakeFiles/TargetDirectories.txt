@@ -1,0 +1,7 @@
+/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/rebuild_cache.dir
+/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/edit_cache.dir
+/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/wssl_sub.dir
+/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/wssl_pub.dir
+/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/wssl.dir
+/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/CertificationAuthority.dir
+/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/CryptoLib.dir

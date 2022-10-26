@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/Crypto_pub.o.dir/Crypto_pub_mqtt.cpp.o -o Crypto_pub.o  libCryptoLib.a -lsodium libCryptoLib.a -lsodium -lcryptopp -lmosquitto 
