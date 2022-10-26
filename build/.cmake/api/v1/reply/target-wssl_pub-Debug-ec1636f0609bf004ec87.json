@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "CertificationAuthority"
+			"path" : "wssl_pub"
 		}
 	],
 	"backtrace" : 1,
@@ -11,8 +11,7 @@
 		"commands" : 
 		[
 			"add_executable",
-			"target_link_libraries",
-			"target_include_directories"
+			"target_link_libraries"
 		],
 		"files" : 
 		[
@@ -26,19 +25,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 10,
+				"line" : 11,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
 				"line" : 17,
-				"parent" : 0
-			},
-			{
-				"command" : 2,
-				"file" : 0,
-				"line" : 15,
 				"parent" : 0
 			}
 		]
@@ -55,17 +48,10 @@
 					"fragment" : "-std=gnu++2a"
 				}
 			],
-			"includes" : 
-			[
-				{
-					"backtrace" : 3,
-					"path" : "/home/marcia/Desktop/WSSL_Library/src"
-				}
-			],
 			"language" : "CXX",
 			"sourceIndexes" : 
 			[
-				1
+				0
 			]
 		}
 	],
@@ -73,10 +59,14 @@
 	[
 		{
 			"backtrace" : 2,
+			"id" : "wssl::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 2,
 			"id" : "CryptoLib::@6890427a1f51a3e7e1df"
 		}
 	],
-	"id" : "CertificationAuthority::@6890427a1f51a3e7e1df",
+	"id" : "wssl_pub::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -91,18 +81,27 @@
 			},
 			{
 				"backtrace" : 2,
+				"fragment" : "libwssl.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
 				"fragment" : "libCryptoLib.a",
 				"role" : "libraries"
 			},
 			{
 				"fragment" : "-lsodium",
 				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lmosquitto",
+				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
 	},
-	"name" : "CertificationAuthority",
-	"nameOnDisk" : "CertificationAuthority",
+	"name" : "wssl_pub",
+	"nameOnDisk" : "wssl_pub",
 	"paths" : 
 	{
 		"build" : ".",
@@ -111,14 +110,14 @@
 	"sourceGroups" : 
 	[
 		{
-			"name" : "Header Files",
+			"name" : "Source Files",
 			"sourceIndexes" : 
 			[
 				0
 			]
 		},
 		{
-			"name" : "Source Files",
+			"name" : "Header Files",
 			"sourceIndexes" : 
 			[
 				1
@@ -129,13 +128,13 @@
 	[
 		{
 			"backtrace" : 1,
-			"path" : "src/CryptoIdentity.h",
+			"compileGroupIndex" : 0,
+			"path" : "publisher.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "CertificationAuthority.cpp",
+			"path" : "src/CryptoIdentity.h",
 			"sourceGroupIndex" : 1
 		}
 	],

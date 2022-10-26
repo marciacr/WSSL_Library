@@ -22,22 +22,6 @@ sodium/crypto_sign.h
 string
 -
 
-/home/marcia/Desktop/WSSL_Library/src/safety_entity_rcv.cpp
-iostream
--
-chrono
--
-iomanip
--
-string
--
-lib_wssl.h
-/home/marcia/Desktop/WSSL_Library/src/lib_wssl.h
-CryptoIdentity.h
-/home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.h
-fstream
--
-
 /home/marcia/Desktop/WSSL_Library/src/safety_entity_send.cpp
 iostream
 -

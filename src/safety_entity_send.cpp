@@ -73,7 +73,7 @@ struct wssl_send_return entity_safety_send(string msg, string id_dest, struct ws
                 //Comment here if using the line to generate erros
                 sRet.table[i].seq_number ++; 
                 //Remove commentary to generate errors in the seq. number
-                sRet.table[i].seq_number = test_seq_number(sRet.table[i].seq_number); 
+                //sRet.table[i].seq_number = test_seq_number(sRet.table[i].seq_number); 
                 
                 wssl_msg = to_string(sRet.table[i].timeStamp) + "|" + sRet.table[i].data + "|" + to_string(sRet.table[i].seq_number);         
                 table_status = REPLACE_MSG;

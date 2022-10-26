@@ -8,8 +8,8 @@ add_library(CryptoLib STATIC src/CryptoIdentity.cpp src/CryptoIdentity.h)
 add_library(wssl STATIC src/safety_entity_send.cpp src/safety_entity_rcv.cpp src/lib_wssl.h)
 
 add_executable(CertificationAuthority ${HEADERS} CertificationAuthority.cpp)
-add_executable(wssl_pub publisher.cpp publisher.cpp ${HEADERS})
-add_executable(wssl_sub subscriber.cpp subscriber.cpp ${HEADERS})
+add_executable(wssl_pub publisher.cpp ${HEADERS})
+add_executable(wssl_sub subscriber.cpp ${HEADERS})
 
 target_include_directories(CertificationAuthority PUBLIC src)
 
