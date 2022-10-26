@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library
+CMAKE_SOURCE_DIR = /home/marcia/Desktop/WSSL_Library
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library
+CMAKE_BINARY_DIR = /home/marcia/Desktop/WSSL_Library
 
 # Include any dependencies generated for this target.
 include CMakeFiles/CryptoLib.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/CryptoLib.dir/flags.make
 
 CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.o: CMakeFiles/CryptoLib.dir/flags.make
 CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.o: src/CryptoIdentity.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.o -c /home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/CryptoIdentity.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marcia/Desktop/WSSL_Library/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.o -c /home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.cpp
 
 CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/CryptoIdentity.cpp > CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.cpp > CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.i
 
 CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/CryptoIdentity.cpp -o CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.cpp -o CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.s
 
 # Object files for target CryptoLib
 CryptoLib_OBJECTS = \
@@ -80,7 +80,7 @@ CryptoLib_EXTERNAL_OBJECTS =
 libCryptoLib.a: CMakeFiles/CryptoLib.dir/src/CryptoIdentity.cpp.o
 libCryptoLib.a: CMakeFiles/CryptoLib.dir/build.make
 libCryptoLib.a: CMakeFiles/CryptoLib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libCryptoLib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marcia/Desktop/WSSL_Library/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libCryptoLib.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/CryptoLib.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/CryptoLib.dir/link.txt --verbose=$(VERBOSE)
 
@@ -94,6 +94,6 @@ CMakeFiles/CryptoLib.dir/clean:
 .PHONY : CMakeFiles/CryptoLib.dir/clean
 
 CMakeFiles/CryptoLib.dir/depend:
-	cd /home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library /home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library /home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library /home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library /home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/CryptoLib.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/marcia/Desktop/WSSL_Library && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/marcia/Desktop/WSSL_Library /home/marcia/Desktop/WSSL_Library /home/marcia/Desktop/WSSL_Library /home/marcia/Desktop/WSSL_Library /home/marcia/Desktop/WSSL_Library/CMakeFiles/CryptoLib.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/CryptoLib.dir/depend
 

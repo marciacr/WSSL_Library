@@ -6,13 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/lib_wssl.h
+/home/marcia/Desktop/WSSL_Library/src/lib_wssl.h
 string
 -
 
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/subscriber.cpp
+/home/marcia/Desktop/WSSL_Library/subscriber.cpp
 src/lib_wssl.h
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/lib_wssl.h
+/home/marcia/Desktop/WSSL_Library/src/lib_wssl.h
 iostream
 -
 mosquitto.h

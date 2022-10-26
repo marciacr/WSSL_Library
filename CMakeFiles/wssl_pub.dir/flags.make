@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=gnu++2a
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src 
+CXX_INCLUDES = 
 

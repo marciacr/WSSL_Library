@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/CryptoIdentity.cpp
+/home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.cpp
 CryptoIdentity.h
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/CryptoIdentity.h
+/home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.h
 map
 -
 string
@@ -32,7 +32,7 @@ iostream
 cstring
 -
 
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/CryptoIdentity.h
+/home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.h
 map
 -
 string

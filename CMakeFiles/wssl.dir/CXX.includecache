@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/CryptoIdentity.h
+/home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.h
 map
 -
 string
@@ -18,11 +18,11 @@ sodium/crypto_box.h
 sodium/crypto_sign.h
 -
 
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/lib_wssl.h
+/home/marcia/Desktop/WSSL_Library/src/lib_wssl.h
 string
 -
 
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/safety_entity_rcv.cpp
+/home/marcia/Desktop/WSSL_Library/src/safety_entity_rcv.cpp
 iostream
 -
 chrono
@@ -32,13 +32,13 @@ iomanip
 string
 -
 lib_wssl.h
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/lib_wssl.h
+/home/marcia/Desktop/WSSL_Library/src/lib_wssl.h
 CryptoIdentity.h
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/CryptoIdentity.h
+/home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.h
 fstream
 -
 
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/safety_entity_send.cpp
+/home/marcia/Desktop/WSSL_Library/src/safety_entity_send.cpp
 iostream
 -
 chrono
@@ -50,9 +50,9 @@ string
 unistd.h
 -
 lib_wssl.h
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/lib_wssl.h
+/home/marcia/Desktop/WSSL_Library/src/lib_wssl.h
 CryptoIdentity.h
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/CryptoIdentity.h
+/home/marcia/Desktop/WSSL_Library/src/CryptoIdentity.h
 string.h
 -
 

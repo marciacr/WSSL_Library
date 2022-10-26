@@ -1,12 +1,12 @@
 [
 {
   "directory": "/home/marcia/Desktop/WSSL_Library/build",
-  "command": "/usr/bin/g++   -I/home/marcia/Desktop/WSSL_Library/src  -g   -std=gnu++2a -o CMakeFiles/wssl_sub.dir/subscriber.cpp.o -c /home/marcia/Desktop/WSSL_Library/subscriber.cpp",
+  "command": "/usr/bin/g++    -g   -std=gnu++2a -o CMakeFiles/wssl_sub.dir/subscriber.cpp.o -c /home/marcia/Desktop/WSSL_Library/subscriber.cpp",
   "file": "/home/marcia/Desktop/WSSL_Library/subscriber.cpp"
 },
 {
   "directory": "/home/marcia/Desktop/WSSL_Library/build",
-  "command": "/usr/bin/g++   -I/home/marcia/Desktop/WSSL_Library/src  -g   -std=gnu++2a -o CMakeFiles/wssl_pub.dir/publisher.cpp.o -c /home/marcia/Desktop/WSSL_Library/publisher.cpp",
+  "command": "/usr/bin/g++    -g   -std=gnu++2a -o CMakeFiles/wssl_pub.dir/publisher.cpp.o -c /home/marcia/Desktop/WSSL_Library/publisher.cpp",
   "file": "/home/marcia/Desktop/WSSL_Library/publisher.cpp"
 },
 {

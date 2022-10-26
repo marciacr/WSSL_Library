@@ -6,13 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CertificationAuthority.cpp
+/home/marcia/Desktop/WSSL_Library/CertificationAuthority.cpp
 iostream
 -
 sys/stat.h
 -
 CryptoIdentity.h
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CryptoIdentity.h
+/home/marcia/Desktop/WSSL_Library/CryptoIdentity.h
 
 src/CryptoIdentity.h
 map

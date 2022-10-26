@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/safety_entity_rcv.cpp" "/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/wssl.dir/src/safety_entity_rcv.cpp.o"
-  "/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/safety_entity_send.cpp" "/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/wssl.dir/src/safety_entity_send.cpp.o"
+  "/home/marcia/Desktop/WSSL_Library/src/safety_entity_rcv.cpp" "/home/marcia/Desktop/WSSL_Library/CMakeFiles/wssl.dir/src/safety_entity_rcv.cpp.o"
+  "/home/marcia/Desktop/WSSL_Library/src/safety_entity_send.cpp" "/home/marcia/Desktop/WSSL_Library/CMakeFiles/wssl.dir/src/safety_entity_send.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

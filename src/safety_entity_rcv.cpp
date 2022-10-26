@@ -16,7 +16,7 @@
 #define delaySndMAX 10000
 #define delayRcvMAX 20000
 #define WriteFile 0
-#define LogError 1
+#define LogError 0
 
 enum status {sts_OK, sts_DUP, sts_wrongSEQ, sts_lostMSG, sts_delaySnd, sts_delayRcv};
 // Declare namespace standard library (std)

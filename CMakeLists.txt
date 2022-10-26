@@ -11,8 +11,6 @@ add_executable(CertificationAuthority ${HEADERS} CertificationAuthority.cpp)
 add_executable(wssl_pub publisher.cpp publisher.cpp ${HEADERS})
 add_executable(wssl_sub subscriber.cpp subscriber.cpp ${HEADERS})
 
-target_include_directories(wssl_pub PUBLIC src)
-target_include_directories(wssl_sub PUBLIC src)
 target_include_directories(CertificationAuthority PUBLIC src)
 
 target_link_libraries(CertificationAuthority CryptoLib sodium)

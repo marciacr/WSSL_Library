@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CertificationAuthority.cpp" "/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/CertificationAuthority.dir/CertificationAuthority.cpp.o"
+  "/home/marcia/Desktop/WSSL_Library/CertificationAuthority.cpp" "/home/marcia/Desktop/WSSL_Library/CMakeFiles/CertificationAuthority.dir/CertificationAuthority.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -15,7 +15,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/CMakeFiles/CryptoLib.dir/DependInfo.cmake"
+  "/home/marcia/Desktop/WSSL_Library/CMakeFiles/CryptoLib.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

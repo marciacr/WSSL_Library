@@ -66,9 +66,9 @@ int main()
     {
         /* ------------------- DELAY CALC -------------------*/
         //sRet.wssl_msg = "1657888424062511|MY_MESSAGE|10000"; /* ---- USING ONLY MQTT ---*/
-        if (i==0)
+        if (i==1)
              time_first = rget_timeStamp();
-        else if (i==(NUM_MSG-1)){
+        else if (i==(NUM_MSG)){
             time_last = rget_timeStamp();
         }
         /* ------------------- DELAY CALC -------------------*/

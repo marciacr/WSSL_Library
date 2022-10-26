@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/publisher.cpp
+/home/marcia/Desktop/WSSL_Library/publisher.cpp
 src/lib_wssl.h
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/lib_wssl.h
+/home/marcia/Desktop/WSSL_Library/src/lib_wssl.h
 iostream
 -
 mosquitto.h
@@ -18,7 +18,7 @@ unistd.h
 chrono
 -
 
-/home/marcia/Desktop/Mestrado_ISEP/Repositories/wssl_library/src/lib_wssl.h
+/home/marcia/Desktop/WSSL_Library/src/lib_wssl.h
 string
 -
 

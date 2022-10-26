@@ -151,7 +151,7 @@ struct wssl_send_return entity_security_send(string safe_msg, string id_sender, 
 
     // Load identities inside the Sender file
     CryptoIdentity* idLoaded1 = CryptoIdentity::load("senderFile");
-    CryptoIdentity* idLoaded2 = CryptoIdentity::load("sender2File");
+    //CryptoIdentity* idLoaded2 = CryptoIdentity::load("sender2File");
     //cout << "safe_msg: " << safe_msg << endl;
     
     int strSize = safe_msg.length();
