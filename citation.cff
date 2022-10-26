@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Márcia"
+  given-names: "C. Rocha"
+  orcid: "https://orcid.org/0000-0003-0138-3122"
+- family-names: "Enio"
+  given-names: "Vasconcelos Filho"
+  orcid: "https://orcid.org/0000-0001-5459-6821"
+title: "WSSL_Library"
+version: 1.0.0
+doi: 10.5281/zenodo.1234
+date-released: 2022-10-26
+url: "https://github.com/marciacr/WSSL_Library"
