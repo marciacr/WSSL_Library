@@ -38,7 +38,7 @@ If nothing works, try this:
 Go to the location of WSSL_Security&Safety and do the following:
 
 **To include:**
- - Requires ```sodium``` library; Can be installed via ```apt install libsodium-dev``` or similar installers, or through local building: https://libsodium.gitbook.io/doc/installation
+ - Requires ```sodium``` library; Can be installed via ```sudo apt install libsodium-dev``` or similar installers, or through local building: https://libsodium.gitbook.io/doc/installation
 
  - Include on your projects build files CryptoLib and sodium to the CMakeList.txt file:
    - cmake: ```target_link_libraries(<project name> CryptoLib sodium)```
@@ -52,7 +52,7 @@ First install libmosquitto:
 
 > sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
 > sudo apt-get update
-> apt-get install libmosquitto-dev
+> sudo apt-get install libmosquitto-dev
 
 Then, install mosquitto clients:
 
