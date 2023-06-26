@@ -1,1 +1,0 @@
-/usr/bin/g++  -g   CMakeFiles/wssl_sub.dir/subscriber.cpp.o  -o wssl_sub  libwssl.a libCryptoLib.a -lsodium -lmosquitto 

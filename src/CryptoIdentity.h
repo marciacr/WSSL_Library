@@ -9,6 +9,7 @@
 
 class CryptoIdentity {
 public:
+	// static const unsigned int SIGN_SIZE = crypto_sign_SEEDBYTES;
 	static const unsigned int SIGN_SIZE = crypto_sign_BYTES;
 
 	/**
@@ -101,19 +102,32 @@ public:
 	void hex2bin(std::string hex, unsigned char* bin, bool pk);
 
 	/**
-	 * @return A list of the identities know to this identity
+	 * @return A list of the identities known to this identity
 	 */
 	std::vector<std::string>* listKnownIdentities();
 	~CryptoIdentity();
+	
+	/**
+	 * The public key
+	 */
+	unsigned char* pk;
+	
+private:
+	CryptoIdentity(std::string path, bool genKeys);
+
+	bool writeKeyToFile(std::string path, unsigned char* key, bool pk);
+	bool writeMapToFile(std::string path, std::map<std::string, std::string> map);
+	bool writeStringToFile(std::string path, std::string text);
+	void readKeyFromFile(std::string path, unsigned char* key, bool pk);
+	std::map<std::string, std::string> readMapFromFile(std::string path);
+	std::string readStringFromFile(std::string path);
+	unsigned getRand();
 
 	/**
 	 * This is publicly accessible for test purposes only. Please do not use.
 	 */
 	unsigned char* sk;
-	/**
-	 * This is publicly accessible for test purposes only. Please do not use.
-	 */
-	unsigned char* pk;
+	
 	/**
 	 * This is publicly accessible for test purposes only. Please do not use.
 	 */
@@ -130,18 +144,6 @@ public:
 	 * This is publicly accessible for test purposes only. Please do not use.
 	 */
 	std::string label;
-private:
-	CryptoIdentity(std::string path, bool genKeys);
-
-	bool writeKeyToFile(std::string path, unsigned char* key, bool pk);
-	bool writeMapToFile(std::string path, std::map<std::string, std::string> map);
-	bool writeStringToFile(std::string path, std::string text);
-	void readKeyFromFile(std::string path, unsigned char* key, bool pk);
-	std::map<std::string, std::string> readMapFromFile(std::string path);
-	std::string readStringFromFile(std::string path);
-	unsigned getRand();
-
-
 
 };
 

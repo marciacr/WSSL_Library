@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/WSSL_Test.dir/caller.cpp.o -o WSSL_Test  libwssl.a libCryptoLib.a -lsodium 

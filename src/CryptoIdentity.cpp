@@ -1,11 +1,11 @@
 #include "CryptoIdentity.h"
 
-#include <map>
-#include <string>
+
 #include <sodium.h>
 #include <sodium/crypto_sign.h>
 #include <sys/stat.h>
 #include <filesystem>
+// #include <experimental/filesystem>
 #include <stdexcept>
 #include <fstream>
 #include <random>
@@ -71,7 +71,6 @@ int CryptoIdentity::verifySignature(const unsigned char* signedMessage, int mlen
 }
 
 std::string CryptoIdentity::verifySignature(std::string signedMessage, std::string key){
-	//std::cout << "deu bom" << std::endl;
 	int cleanSize = signedMessage.length() - CryptoIdentity::SIGN_SIZE;
 	unsigned char* messageCleaned = (unsigned char*) malloc(cleanSize * sizeof(char));
 	int res = verifySignature((const unsigned char *) signedMessage.c_str(), signedMessage.length(), messageCleaned, &cleanSize, key);
@@ -104,14 +103,16 @@ bool CryptoIdentity::save() {
 	struct stat info{};
 	int dirExists = stat(storedPath.c_str(), &info );
 	if(dirExists != 0 ){
+		// bool dirCreated = std::experimental::filesystem::create_directories(storedPath);
 		bool dirCreated = std::filesystem::create_directories(storedPath);
 		if(!dirCreated)
 			return false;
 	}
+
 	//TODO possible improvement: write this encrypted
 	bool res = true;
 	res |= writeKeyToFile(storedPath + "/sk", this->sk, false);
-	res |= writeKeyToFile(storedPath + "/test2", this->pk, true);
+	res |= writeKeyToFile(storedPath + "/pk", this->pk, true);
 	res |= writeMapToFile(storedPath + "/knownIdentities", this->knownIdentities);
 	res |= writeStringToFile(storedPath + "/label", this->label);
 	res |= writeStringToFile(storedPath + "/id", std::to_string(this->id));
@@ -121,7 +122,7 @@ bool CryptoIdentity::save() {
 CryptoIdentity* CryptoIdentity::load(std::string path) {
 	CryptoIdentity* ci = new CryptoIdentity(path, false);
 	ci->readKeyFromFile(ci->storedPath + "/sk", ci->sk, false);
-	ci->readKeyFromFile(ci->storedPath + "/test2", ci->pk, true);
+	ci->readKeyFromFile(ci->storedPath + "/pk", ci->pk, true);
 	ci->knownIdentities = ci->readMapFromFile(ci->storedPath + "/knownIdentities");
 	ci->label = ci->readStringFromFile(ci->storedPath + "/label");
 	ci->id = std::stoll(ci->readStringFromFile(ci->storedPath + "/id"));
@@ -143,7 +144,7 @@ bool CryptoIdentity::writeKeyToFile(std::string path, unsigned char* key, bool p
 bool CryptoIdentity::writeStringToFile(std::string path, std::string text){
 	try{
 		std::ofstream skFile;
-		skFile.open(path, std::ios::out);
+		skFile.open(path, std::ios::out | std::ios::trunc);
 		skFile.write(text.c_str(), text.length());
 		skFile.close();
 	}catch (...){
@@ -157,6 +158,7 @@ bool CryptoIdentity::writeStringToFile(std::string path, std::string text){
 bool CryptoIdentity::writeMapToFile(std::string path, std::map<std::string, std::string> map) {
 	try{
 		std::ofstream skFile;
+		// std::experimental::filesystem::create_directories(path);
 		std::filesystem::create_directories(path);
 
 		for(auto& kv : map){
@@ -193,6 +195,7 @@ std::string CryptoIdentity::readStringFromFile(std::string path){
 std::map<std::string, std::string> CryptoIdentity::readMapFromFile(std::string path) {
 	std::map<std::string, std::string> map;
 	try{
+		// for (const auto & entry : std::experimental::filesystem::directory_iterator(path)){
 		for (const auto & entry : std::filesystem::directory_iterator(path)){
 			std::string key = readStringFromFile(entry.path().string());
 			map.emplace(entry.path().filename().string(), key);
@@ -244,7 +247,9 @@ void CryptoIdentity::hex2bin(std::string hex, unsigned char* bin, bool pk) {
 }
 
 std::string CryptoIdentity::getKnownKey(std::string label) {
-	if(this->knownIdentities.contains(label))
+	// if(this->knownIdentities.contains(label)) //Use this line if c++ version > 17
+	// if(this->knownIdentities.find(label) != this->knownIdentities.end())
+	if(this->knownIdentities.count(label) > 0)
 		return this->knownIdentities.at(label);
 	else{
 		std::cout << "Get known keys failed " << std::endl;

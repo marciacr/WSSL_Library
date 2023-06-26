@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/Vortex_pub.dir/CryptoVortex_pub.cpp.o -o Vortex_pub  libCryptoLib.a -lsodium -lmosquitto 

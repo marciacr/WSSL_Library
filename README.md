@@ -24,27 +24,27 @@ WSSL is part of the project Airborne data collection on resilient system archite
 
 To install Make and CMake in Ubuntu OS use the following commands:
 
-> $sudo apt update
-> $make -version
+> sudo apt update
+> make -version
 
 If make is not installed in Ubuntu, then install it:
-> $sudo apt install make 
+> sudo apt install make 
 
 If nothing works, try this:
-> $sudo apt install build-essential
+> sudo apt install build-essential
 
 ### VORTEX Library & WSSL
 
 Go to the location of WSSL_Security&Safety and do the following:
 
 **To include:**
- - Requires ```sodium``` library; Can be installed via ```sudo apt install libsodium-dev``` or similar installers, or through local building: https://libsodium.gitbook.io/doc/installation
+ - Requires ```sodium``` library; Can be installed via ```apt install libsodium-dev``` or similar installers, or through local building: https://libsodium.gitbook.io/doc/installation
 
  - Include on your projects build files CryptoLib and sodium to the CMakeList.txt file:
    - cmake: ```target_link_libraries(<project name> CryptoLib sodium)```
 
 **To build:**
-> ```cmake . && cmake --build .```
+> ```cmake -Bbuild -H. && cmake --build build```
 
 ### MQTT LIB Mosquitto.h
 
@@ -64,6 +64,19 @@ Include the library in your code:
 
 >#include <mosquitto.h>
 
+change the listener port from 1883 to 1885 and restart the service:
+
+> sudo nano /etc/mosquitto/conf.d/custom.conf
+
+Port to use for the default listener
+> listener 1885
+
+Allow anonymous authentication
+> allow_anonymous true
+
+Restart the service broker:
+> service mosquitto restart
+
 ## References 
 
 https://mosquitto.org/download/
@@ -71,3 +84,6 @@ https://mosquitto.org/download/
 http://www.steves-internet-guide.com/install-mosquitto-linux/
 
 https://linuxhint.com/install-make-ubuntu/
+
+https://libsodium.gitbook.io/doc/public-key_cryptography/public-key_signatures
+

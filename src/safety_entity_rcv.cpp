@@ -1,339 +1,350 @@
-/* ------------------------------------------------ LIBRARY INCLUDES ----------------------------------------------- */
-#include <iostream>
-#include <chrono>             // Chrono library is used to deal with date and time.
-#include <iomanip>            // put_time()
-#include <string>             // string from C
-#include "lib_wssl.h"         // WSSL Library  
-#include "CryptoIdentity.h"   // VORTEX Library for digital signatures
-#include <fstream>
 
-/* ------------------------------------------  DEFINES & GLOBAL VARIABLES ------------------------------------------ */
+#include "libwssl_class.h"
 
-#define EMPTY_TABLE 0
-#define OK 1
-#define REPLACE_MSG 2
-#define NEW_MSG 3
-#define delaySndMAX 10000
-#define delayRcvMAX 20000
-#define WriteFile 0
-#define LogError 0
+#define writeDelay 0
+#define writeError 0
 
 enum status {sts_OK, sts_DUP, sts_wrongSEQ, sts_lostMSG, sts_delaySnd, sts_delayRcv};
-// Declare namespace standard library (std)
-using namespace std;      
+   
+LibWssl Rcv;
 
 // The number of connections inside the table is zero and the table status is OK
-int rnum_connect = 0;
-int rtable_status = OK; 
-ofstream myFile;
-ofstream logError;
+int numConnect = 0;
+int tableStatus = OK; 
 
-/* ----- Function that calculates the current time (timeStamp) in microseconds and store in a long int variable ----- */
-long int rget_timeStamp()
-{
-    long int timeStamp = static_cast<long int>
-        (chrono::duration_cast<chrono::microseconds>(chrono::high_resolution_clock::now().time_since_epoch()).count());
-    return timeStamp;
-}
+// Log files for evaluation purpose only
+std::ofstream logDelay;
+std::ofstream logError;
 
-/* ---------- Security Entity responsible for verify signature and return the message with safety entities ---------- */
-struct wssl_rcv_return entity_security_rcv(string wssl_msg, string id_sender, struct wssl_rcv_return rRet)
+/**
+ * Receives the message from sender (wsslMsg), try to remove the signature using Sender public key (pk), 
+ * and returns the ReceiverReturn object (rRet) updated with the plain message (msg)
+ * @param wsslMsg Signed message received from Sender
+ * @param senderID Sender identificator, also called label
+ * @param path Path name of the Sender identity
+ * @param rRet ReceiverReturn object
+ * @return Updated ReceiverReturn object (rRet), if success. Returns "error" if something goes wrong
+ * */
+ReceiverReturn entity_security_rcv(std::string wsslMsg, std::string senderID, std::string path, ReceiverReturn rRet)
 {
-    //cout << "\n<<<<<<<<<< RECEIVER SIDE >>>>>>>>>" << endl << endl;
     int signSize = CryptoIdentity::SIGN_SIZE;
-    int strSize = wssl_msg.length() - signSize;
-    int fullSize = wssl_msg.length();
+    int strSize = wsslMsg.length() - signSize;
+    int fullSize = wsslMsg.length();
     
-    // cout << "\nstrSigned: "<< wssl_msg <<  endl;
-    // cout << "strSize: " << strSize << endl;
-    // cout << "fullsize: " << fullSize << endl;
+    // std::cout << "\nstrSigned: "<< wsslMsg <<  std::endl;
+    // std::cout << "strSize: " << strSize << std::endl;
+    // std::cout << "fullsize: " << fullSize << std::endl;
     
-    CryptoIdentity* idLoaded = CryptoIdentity::load("rcvFile");    
-    rRet.plain_text = idLoaded->verifySignature(wssl_msg, idLoaded->getKnownKey(id_sender));     
+    CryptoIdentity* idLoaded = CryptoIdentity::load(path);    
+    rRet.plainText = idLoaded->verifySignature(wsslMsg, idLoaded->getKnownKey(senderID));     
+    //std::cout << rRet.plainText << std::endl;
     return rRet;
 }
 
-/* ----------- Safety Entity responsible for separating the Time Stamp and Sequence ID from the message ----------- */
-struct wssl_rcv_return entity_safety_rcv(string decript_msg, string id_sender, long int rcv_TimeStamp, struct wssl_rcv_return rRet)
+/**
+ * Safety Entity inside the _Receiver, responsible for removing and checking the message Time Stamp and Sequence Number
+ * @param safeMsg Message recovered by security entity that contains the sequence number and time stamp
+ * @param senderID Sender identificator, also called label
+ * @param timeStamp Time the message was sent in microseconds 
+ * @param rRet SenderReturn object
+ * @return Updated ReceiverReturn object (rRet)
+ * */
+ReceiverReturn entity_safety_rcv(std::string safeMsg, std::string senderID, long int timeStamp, ReceiverReturn rRet)
 {
-    //cout << "\n<<<<<<<<<<<< SAFETY >>>>>>>>>>>>>" << endl;
-    int i = 0;
-    /* Gets the position from the separators '|' inside the string */
-    int pos = decript_msg.find('|');             // Stores the '|' position separating the TimeStamp from the rest
-    string temp1 = decript_msg.substr(pos+1);    // Temp string stores the string starting on position till the end
-    int pos2 = temp1.find("|");                  // Stores the '|' position separating Plain text from sequence number
+    int i, pos, pos2, seqNumber = 0;
+    long int msgTimeStamp = 0;
+    std::string temp1;
+    /**
+     * Gets the position from the separators '|' inside the string:
+     * pos: Stores the '|' position separating the TimeStamp from the rest,
+     * temp1: Stores the string starting on position till the end,
+     * pos2: Stores the '|' position separating Plain text from sequence number
+     * */
 
-    /* Spliting the received string to get the time stamp, encrypted message and sequence ID */
-    long int msgTimeStamp = stol(decript_msg.substr(0,pos));
-    string msg = temp1.substr(0, pos2);
-    int seq_number = stol(temp1.substr(pos2+1));
+    pos = safeMsg.find(Rcv.delimiter);             
+    temp1 = safeMsg.substr(pos+Rcv.delimiter.length());    
+    pos2 = temp1.find(Rcv.delimiter);   
 
-    // cout << "msg: " << msg << endl;
-    // cout << "arriving time stamp: " << msgTimeStamp << endl;
-    // cout << "seq number: " << seq_number << endl;
+    /**
+     * Spliting the received string to get the time stamp, message received from security (safeMsg) and sequence ID 
+     * */
+    msgTimeStamp = std::stol(safeMsg.substr(0,pos));
+    safeMsg = temp1.substr(0, pos2);
 
+    try{
+        seqNumber = std::stol(temp1.substr(pos2+Rcv.delimiter.length()));
+    }
+    catch (std::invalid_argument const& ex)
+    {
+        std::cout << "Invalid message syntax. You must not send the delimiter inside your message: " << std::endl;
+        safeMsg = "invalid message syntax";
+        msgTimeStamp = -1;
+        seqNumber = -1;
+        return rRet;
+        // throw std::invalid_argument("Invalid syntax. You must not send the delimiter inside your message");
+    }               
+
+   
+
+    // std::cout << "msg: " << safeMsg << std::endl;
+    // std::cout << "arriving time stamp: " << msgTimeStamp << std::endl;
+    // std::cout << "seq number: " << seqNumber << std::endl;
+        
     /*  Check if the table is not empty and if status is OK */
-    if((rnum_connect != EMPTY_TABLE) && (rtable_status == OK)){
-        if(WriteFile)
-            myFile.open("delayReceiver.csv", ios::out | ios::app);
-        if(LogError)
-            logError.open("logErrors.csv", ios::out | ios::app);
-            
-        /*  Go through the existing connections looking for the sender  */
-        for(i=0; i<rnum_connect; i++){   
+    if((numConnect != EMPTY_TABLE) && (tableStatus == OK)){    
 
-            /*  IF the destination in current array position (i) is not the same of id_dest, 
-                THEN bypass the conditions and goes for the next array position (i+1) */
-            if(rRet.table[i].sender != id_sender){
-                // cout << "\nDestinatary " << rRet.table[i].sender <<  " is different from " << 
-                //     id_sender << ", going for the next position of the array... "<< endl;
-                // cout << "-->" <<endl;
-            }
+        /* ------------------ Evaluation Purporse Only ------------------ */
+        if(writeDelay) 
+            logDelay.open("delays.csv", std::ios::out | std::ios::app);
+        if(writeError) 
+            logError.open("logErrors.csv", std::ios::out | std::ios::app);  
+        /* ----------------------- Evaluation End ----------------------- */
 
-            /*  IF it finds the destination inside the array, 
-                THEN replace the data and timeStamp and increment sequence number by 1  */
-            if(rRet.table[i].sender == id_sender){
-                //cout << "\nConexion found, replacing the data inside the position "<< i 
-                    //<< " with new packet info... " <<endl;
 
-                /* --------------- Check conditions for the sequence number integrity --------------- */
-                if ((seq_number-rRet.table[i].seq_number) == OK ){        //IF it is sequential, status: 0 -> The message is OK 
-                    cout << "The sequence ID is OK (flag = 0), continue..." << endl;
+        /**
+         * Goes through each element of the table looking for the Sender ID: 
+         * IF it finds the Sender ID inside the array, THEN replace the data and timeStamp and increment sequence number by 1
+         * Here message is replaced, thus the number of connections will not change
+         * */
+        for(i=0; i<numConnect; i++){               
+            if(rRet.table[i].senderID == senderID){
+                // std::cout << "\nConexion found, replacing the data inside the position "<< i 
+                    // << " with new packet info... " <<std::endl;
+
+                /**
+                 * Check conditions for the sequence number integrity:
+                 * @if it is sequential, status: 0 -> The message is OK 
+                 * @if it is zero, status: 1 -> The message was duplicated
+                 * @if less than zero, status: 2 -> The message has a wrong sequence ID (messages may have been lost)
+                 * @if Bigger than zero, status: 3 -> The message is out-of-order
+                 * */
+                if ((seqNumber-rRet.table[i].seqNumber) == OK ){    
+                    //std::cout << "The sequence number is OK (flag = 0), continue..." << std::endl;
                     rRet.table[i].status = sts_OK;
-                     if(logError)
-                         logError  << "Message " << seq_number << ", " << "Status: " << rRet.table[i].status << ", " << endl; 
 
-                }else if((seq_number-rRet.table[i].seq_number) == 0){    //IF it is zero, status: 1 -> The message was duplicated
-                    cout << "\n!!! The message is a duplication, setting status flag for duplication (flag = 1) !!!! " << endl;
+                }else if((seqNumber-rRet.table[i].seqNumber) == 0){   
+                    // std::cout << "\n!!! The message is a duplication, setting status flag for DUPLICATED (status = 1) !!!! " << std::endl;
                     rRet.table[i].status = sts_DUP;
-                    if(logError)
-                         logError  << "Message " << seq_number << ", " << "Status: " << rRet.table[i].status << ", " << endl; 
                 
-                }else if((seq_number-rRet.table[i].seq_number) < 0){  //IF NOT 1 or 0, status: 2 -> The message is out-of-order
-                    cout << " \n!!! There is a message out of sequence, setting status flag for wrong sequence number (flag = 2) !!!" << endl;
+                }else if((seqNumber-rRet.table[i].seqNumber) < 0){ 
+                    // std::cout << " \n!!! Lost messages, setting status flag for LOST (status = 2) !!!" << std::endl;
                     rRet.table[i].status = sts_wrongSEQ;
-                    if(LogError)
-                        logError  << "Message " << seq_number << ", " << "Status: " << rRet.table[i].status << ", " << endl;  
-                }else {  //IF NOT 1 or 0, status: 3 -> The message has a wrong sequence ID (messages may have been lost)
-                    cout << " \n!!! Lost messages, setting status flag for wrong sequence number (flag = 3) !!!" << endl;
+                }else {  
+                    // std::cout << " \n!!! There is a message out of sequence, setting status flag for OUT-OF-ORDER (status = 3) !!!" << std::endl;
                     rRet.table[i].status = sts_lostMSG;
-                    if(LogError)
-                        logError  << "Message " << seq_number << ", " << "Status: " << rRet.table[i].status << ", " << endl;  
                 }
 
-                // Replace table position information with the same sender
+                /**
+                 * @if status is neither OUT-OF-ORDER nor DUPLICATED, calculate delay, update table and message
+                 * */
                 if(rRet.table[i].status != sts_wrongSEQ && rRet.table[i].status != sts_DUP){
 
-                    /* Calculate the receive delay by subtracting the time the message arrived by the time the message was sent  */
-                    rRet.table[i].delay_rcv = rcv_TimeStamp - msgTimeStamp; 
-                    /*  Calculating delay between arriving of the two messages  */
-                    rRet.table[i].delay_send = msgTimeStamp - rRet.table[i].timeStamp;
-
-                    // cout << "My rcv_TimeStamp: " << rcv_TimeStamp << endl;
-                    // cout << "My msgTimeStamp: " << msgTimeStamp << endl;
-                    rRet.table[i].data = msg;
-                    rRet.table[i].seq_number = seq_number;
+                    
+                    rRet.table[i].delayRcv = timeStamp - msgTimeStamp; /* Calculate the delay between sent message and received message  */
+                    rRet.table[i].delaySnd = msgTimeStamp - rRet.table[i].timeStamp; /*  Calculate inter-message delay  */
+                    rRet.table[i].data = safeMsg;
+                    rRet.table[i].seqNumber = seqNumber;
                     rRet.table[i].timeStamp = msgTimeStamp; 
 
-                    /* --------------- Check conditions for delay send and delay receive --------------- */
-                    if (rRet.table[i].delay_send > delaySndMAX){ 
-                        //IF delay send is bigger than the MAX defined, status: 4 -> There is an unacceptable delay between the messages
-                        //cout << "\n!!! There is a big delay between the messages, setting status flag for delay between arriving messages (flag = 4) !!!" << endl
-                        if(LogError)
-                            logError  << "Message " << rRet.table[i].seq_number << ", " << "Status: " << sts_delaySnd << ", " << endl; 
+                    /** 
+                     * Check conditions for inter-message delay and sent-received delay
+                     * @if inter-message delay is bigger than INTER_MSG_DELAY_MAX, status: 4 
+                     * @if sent-received delay is bigger than SENT_RCV_DELAY_MAX, status: 5 
+                     * */
+                    if (rRet.table[i].delaySnd > INTER_MSG_DELAY_MAX){ 
+                        //std::cout << "\n!!! There is a big delay between the messages, setting status flag for delay between arriving messages (status = 4) !!!" << std::endl
+                        if(writeError)
+                            logError  << "Message " << rRet.table[i].seqNumber << ", " << "Status: " << sts_delaySnd << ", " << std::endl; 
 
                     }
-
-                    if (rRet.table[i].delay_rcv > delayRcvMAX){ 
-                        //IF delay receive is bigger than the MAX defined, status: 5 -> 
-                        // -> There is an unacceptable delay between the timeStamp inside the message and the real received time
-                        //cout << "\n!!! The message's send time is too different from the message's received time, please check the connection (flag = 5) !!!" << endl;
-                        if(LogError)
-                            logError  << "Message " << rRet.table[i].seq_number << ", " << "Status: " << sts_delayRcv << ", " << endl;  
+                    if (rRet.table[i].delayRcv > SENT_RCV_DELAY_MAX){ 
+                        //std::cout << "\n!!! The message's sent time is too different from the message's received time, please check the connection (status = 5) !!!" << std::endl;
+                        if(writeError)
+                            logError  << "Message " << rRet.table[i].seqNumber << ", " << "Status: " << sts_delayRcv << ", " << std::endl;  
 
                     }
                 }
    
-                //Send data to csv file
-                if(WriteFile)
-                    myFile  << "Delay_" << rRet.table[i].seq_number << ", " << rRet.table[i].delay_send << ", " << endl;
-                    //myFile  << "Delay_" << rRet.table[i].seq_number << ", " << rRet.table[i].delay_send << ", " << rRet.table[i].delay_rcv << endl; 
+                if(writeError)
+                    logError  << "Message " << seqNumber << ", " << "Status: " << rRet.table[i].status << ", " << std::endl;  
+                if(writeDelay)
+                    logDelay  << "Delay_" << rRet.table[i].seqNumber << ", " << rRet.table[i].delaySnd << std::endl; 
+                    // logDelay  << "Delay_" << rRet.table[i].seqNumber << ", " << rRet.table[i].delaySnd << ", " << rRet.table[i].delayRcv << std:endl; 
 
-                //Update the message with the receiver information: TimeStamp | Message Data | Sequence Number | Status | Delay_send | Delay_rcv
-                rRet.plain_text = to_string(rRet.table[i].timeStamp) + "|" + rRet.table[i].data + "|" 
-                    + to_string(rRet.table[i].seq_number) + "|" + to_string(rRet.table[i].status) + "|" 
-                        + to_string(rRet.table[i].delay_send) + "|" + to_string(rRet.table[i].delay_rcv);
-                
-                // Message was replaced, so the number of connections inside the table is still the same
-                rtable_status = REPLACE_MSG; 
+                rRet.plainText = rRet.table[i].data;
+                tableStatus = REPLACE_MSG; 
             }  
         }
         
-        /*  IF table status is OK it means the sender doesn't exists inside the table yet, 
-            THEN create a new connection */
-        if(rtable_status == OK){
-            cout << "\n<< Adding a new packet inside the table in position [" << rnum_connect << "] >>" << endl;
+        /**
+         * IF table status did not change (status == OK):
+         * The sender doesn't exists inside the table yet, THEN create new connection
+         * New message/connection is created and the number of connections increases by 1
+         * */
+        if(tableStatus == OK){
+            // std::cout << "\n<< Adding a new packet inside the table in position [" << numConnect << "] >>" << std::endl;
 
-            /* --------------- Check conditions for the sequence number integrity --------------- */
-            rRet.table[rnum_connect].seq_number = 0;
-            if ((seq_number-rRet.table[rnum_connect].seq_number) == OK )
-            {   //IF it is sequential, status: 0 -> The message is OK 
-                cout << "The sequence ID is OK (flag = 0), continue..." << endl;
-                rRet.table[rnum_connect].status = sts_OK;
-                if(LogError)
-                    logError  << "Message " << seq_number << ", " << "Status: " << rRet.table[rnum_connect].status << ", " << endl; 
-
-            }else if((seq_number-rRet.table[rnum_connect].seq_number) != OK)
-            {   //IF NOT 1, status: 3 -> The message has a wrong sequence ID (messages may have been lost)
-                cout << " \n!!! Lost messages, setting status flag for wrong sequence number (flag = 3) !!!" << endl;
-                rRet.table[rnum_connect].status = sts_lostMSG;
-                if(LogError)
-                    logError  << "Message " << seq_number << ", " << "Status: " << rRet.table[rnum_connect].status << ", " << endl;  
+            /**
+             * Check conditions for the sequence number integrity:
+             * @if it is sequential, status: 0 -> The message is OK 
+             * @if it is zero, status: 1 -> The message was duplicated
+             * @if less than zero, status: 2 -> The message is out-of-order
+             * @if neither one nor zero, status: 3 -> The message has a wrong sequence ID (messages may have been lost)
+             * */
+            rRet.table[numConnect].seqNumber = 0;
+            if ((seqNumber-rRet.table[numConnect].seqNumber) == OK )
+            {
+                //std::cout << "The sequence ID is OK (status = 0), continue..." << std::endl;
+                rRet.table[numConnect].status = sts_OK; 
+            }
+            else if((seqNumber-rRet.table[numConnect].seqNumber) != OK)
+            {  
+                // std::cout << " \n!!! Lost messages, setting status flag for LOST (status = 3) !!!" << std::endl;
+                rRet.table[numConnect].status = sts_lostMSG;
             }         
 
-            rRet.table[rnum_connect].delay_rcv = rcv_TimeStamp - msgTimeStamp; 
-            rRet.table[rnum_connect].delay_send = 0;
+            rRet.table[numConnect].delayRcv = timeStamp - msgTimeStamp; 
+            rRet.table[numConnect].delaySnd = 0;
+            rRet.table[numConnect].data = safeMsg;
+            rRet.table[numConnect].senderID = senderID;        
+            rRet.table[numConnect].seqNumber = seqNumber;   
+            rRet.table[numConnect].timeStamp = msgTimeStamp;  
 
-            // Replace table position information with the same sender
-            rRet.table[rnum_connect].data = msg;
-            rRet.table[rnum_connect].sender = id_sender;          //New sender
-            rRet.table[rnum_connect].seq_number = seq_number;     //Sequence number is received from message
-            rRet.table[rnum_connect].timeStamp = msgTimeStamp;  
-
-            /* --------------- Check conditions for delay receive --------------- */
-            if (rRet.table[rnum_connect].delay_rcv > delayRcvMAX){ 
-                //IF delay receive is bigger than the MAX defined, status: 5 -> 
-                // -> There is an unacceptable delay between the timeStamp inside the message and the real received time
-                cout << "\n!!! The message's send time is too different from the message's received time, please check the connection (flag = 5) !!!" << endl;
-                if(LogError)
-                    logError  << "Message " << rRet.table[rnum_connect].seq_number << ", " << "Status: " << sts_delayRcv << ", " << endl;  
+            if (rRet.table[numConnect].delayRcv > SENT_RCV_DELAY_MAX){ 
+                // std::cout << "\n!!! The message's send time is too different from the message's received time, please check the connection (flag = 5) !!!" << std::endl;
+                if(writeError)
+                    logError  << "Message " << rRet.table[numConnect].seqNumber << ", " << "Status: " << sts_delayRcv << ", " << std::endl;  
 
             }
 
-            if(WriteFile)
-                myFile  << "Delay_" << rRet.table[i].seq_number << ", " << rRet.table[i].delay_send << ", " << endl;
-                //myFile  << "Delay_" << rRet.table[rnum_connect].seq_number << ", " << rRet.table[rnum_connect].delay_send << ", " << rRet.table[rnum_connect].delay_rcv << endl; 
+            if(writeError)
+                logError  << "Message " << seqNumber << ", " << "Status: " << rRet.table[numConnect].status << ", " << std::endl;  
+            if(writeDelay)
+                logDelay  << "Delay_" << rRet.table[numConnect].seqNumber << ", " << rRet.table[numConnect].delaySnd << std::endl; 
+                // logDelay  << "Delay_" << rRet.table[numConnect].seqNumber << ", " << rRet.table[numConnect].delaySnd << ", " << rRet.table[numConnect].delayRcv << std::endl; 
 
-            //Update the message with the receiver information: TimeStamp | Message Data | Sequence Number | Status | Delay_send | Delay_rcv
-            rRet.plain_text = to_string(rRet.table[rnum_connect].timeStamp) + "|" + rRet.table[rnum_connect].data + "|" 
-                + to_string(rRet.table[rnum_connect].seq_number) + "|" + to_string(rRet.table[rnum_connect].status) + "|" 
-                    + to_string(rRet.table[rnum_connect].delay_send) + "|" + to_string(rRet.table[rnum_connect].delay_rcv);
+            rRet.plainText = rRet.table[numConnect].data;
 
-            //New message/connection was created and number of connections increase by 1
-            rtable_status = NEW_MSG;
-            rnum_connect++;    
-            rRet.table->size_array = rnum_connect;            
+            tableStatus = NEW_MSG;
+            numConnect++;    
+            rRet.table->size = numConnect;            
         }
+
     }
 
-    //IF table is empty, THEN create first connection with sequence number 1
-    if(rnum_connect == EMPTY_TABLE){
+    /**
+     * IF table is empty, THEN create first connection of the table
+     * Set number of connections and the sequence number to 1 
+     * */
+    else if(numConnect == EMPTY_TABLE){
         
-        if(WriteFile)
-            myFile.open("delayReceiver.csv", ios::out | ios::trunc);
-        if(logError)
-            logError.open("logErrors.csv", ios::out | ios::trunc);
-
-        /* --------------- Check conditions for the sequence number integrity --------------- */
-        if ((seq_number - EMPTY_TABLE) == OK )
-        {   //IF it is sequential, status: 0 -> The message is OK 
-            cout << "The sequence ID is OK (flag = 0), continue..." << endl;
-            rRet.table[0].status = sts_OK;
-            if(LogError)
-                logError  << "Message " << seq_number << ", " << "Status: " << rRet.table[0].status << ", " << endl; 
-
-        }else if((seq_number - EMPTY_TABLE) != OK)
-        {   //IF NOT 1, status: 3 -> The message has a wrong sequence ID (messages may have been lost)
-            cout << " \n!!! Lost messages, setting status flag for wrong sequence number (flag = 3) !!!" << endl;
-            rRet.table[0].status = sts_lostMSG;
-            if(LogError)
-                logError  << "Message " << seq_number << ", " << "Status: " << rRet.table[0].status << ", " << endl;  
-        }
-
-        rRet.table[0].delay_rcv = rcv_TimeStamp - msgTimeStamp; 
-        rRet.table[0].delay_send = 0;
-
-        //cout << "\nMy Receiver table is empty, creating new packet... " << endl;
-        rRet.table[0].data = msg;
-        rRet.table[0].sender = id_sender;
-        rRet.table[0].seq_number = seq_number;
+        //std::cout << "\nMy Receiver table is empty, creating new packet... " << std::endl;
+        rRet.table[0].data = safeMsg;
+        rRet.table[0].senderID = senderID;
+        rRet.table[0].seqNumber = seqNumber;
         rRet.table[0].timeStamp = msgTimeStamp;
         
-        /* --------------- Check conditions for delay receive --------------- */
-        if (rRet.table[0].delay_rcv > delayRcvMAX){ 
-            //IF delay receive is bigger than the MAX defined, status: 5 -> 
-            // -> There is an unacceptable delay between the timeStamp inside the message and the real received time
-            cout << "\n!!! The message's send time is too different from the message's received time, please check the connection (flag = 5) !!!" << endl;
-            if(LogError)
-                logError  << "Message " << rRet.table[0].seq_number << ", " << "Status: " << sts_delayRcv << ", " << endl;  
+        numConnect = 1;
+        rRet.table->size = 1;
+                  
+        rRet.plainText = rRet.table[0].data;
 
-        }
+        if(writeDelay)
+            logDelay  << "Delay_" << rRet.table[0].seqNumber << ", " << 0 << std::endl; 
+            // logDelay  << "Delay_" << rRet.table[0].seqNumber << ", " << rRet.table[0].delaySnd << ", " << rRet.table[i].delayRcv << std::endl; 
 
-        //Number of connections now is 1
-        rnum_connect = 1;
-        rRet.table->size_array = rnum_connect;
-        
-        //Send data to csv file
-        if(WriteFile)
-            myFile  << "Delay_" << rRet.table[i].seq_number << ", " << rRet.table[i].delay_send << ", " << endl;
-            //myFile  << "Delay_" << rRet.table[0].seq_number << ", " << rRet.table[0].delay_send << ", " << rRet.table[0].delay_rcv << endl; 
-        // if(logError)
-        //     logError  << "Message " << rRet.table[0].seq_number << ", " << "Status: " << rRet.table[0].status << ", " << endl; 
-            
-        //Update the message with the receiver information: TimeStamp | Message Data | Sequence Number | Status | Delay_send | Delay_rcv
-        rRet.plain_text = to_string(rRet.table[0].timeStamp) + "|" + rRet.table[0].data + "|" 
-            + to_string(rRet.table[0].seq_number) + "|" + to_string(rRet.table[0].status) + "|" 
-                + to_string(rRet.table[0].delay_send) + "|" + to_string(rRet.table[0].delay_rcv);
-
-        if(WriteFile)
-            myFile.close();
-        if(LogError)
-            logError.close();            
     }
 
-    //Finished function, so the table status is OK again
-    rtable_status = OK; 
-    if(WriteFile)
-        myFile.close();
-    if(LogError)
-        logError.close();   
+    tableStatus = OK;
+
+    /* ------------------ Evaluation Purporse Only ------------------ */
+    if(writeDelay)
+        logDelay.close();
+    if(writeError)
+        logError.close();  
+    /* ----------------------- Evaluation End ----------------------- */
+    
     return rRet;
 }
 
-/*  WSSL Function, responsible for calling the safety and security layer  */
-struct wssl_rcv_return wssl_rcv_msg(string wssl_msg, string id_sender, struct wssl_rcv_return rRet){
+/**
+ * WSSL rcv function is responsible for calling the safety and security entities
+ * @param wsslMsg Message received from application
+ * @param senderID Sender identificator, also called label
+ * @param path Path name of the Sender identity
+ * @param timeStamp Time the message was sent in microseconds 
+ * @param sRet SenderReturn object
+ * @return sRet Updated SenderReturn object
+ * */
+ReceiverReturn wssl_rcv_msg(std::string wsslMsg, std::string senderID, std::string path, long int timeStamp,  ReceiverReturn rRet){
     
-    //Stores the time that the message was received to calculate delay between sender and receiver 
-    long int rcv_TimeStamp = rget_timeStamp(); 
-    //Calls Security entity passing the signed message, the destination ID and the struct in the parameters, the return updates the struct itself
-    rRet = entity_security_rcv(wssl_msg, id_sender, rRet);
-    if(rRet.plain_text == "error"){
-        if(LogError){
-            logError.open("logErrors.csv", ios::out | ios::app);
-            //cout << "Warning, something is wrong when verifying the signature!" << endl;
-            logError  << "Security error!" << endl; 
+    rRet = entity_security_rcv(wsslMsg, senderID, path, rRet);
+    if(rRet.plainText == "error"){
+        if(writeError){
+            logError.open("logErrors.csv", std::ios::out | std::ios::app);
+            logError  << "Security error!" << std::endl; 
             logError.close();
         }
         return rRet;
     }else{
-        //Calls Safety entity passing the same parameters, but now with the message received from security
-        rRet = entity_safety_rcv(rRet.plain_text, id_sender, rcv_TimeStamp, rRet);
-        //Return the original message for the application
+        rRet = entity_safety_rcv(rRet.plainText, senderID, timeStamp, rRet);
         return rRet;
-    }
-    
-    /*------------------------ ONLY SAFETY TEST ------------------------*/
-    // rRet = entity_safety_rcv(rRet.plain_text, id_sender, rcv_TimeStamp, rRet);
-    // return rRet;
+    } 
 }
 
-/*  The library starts here  */
-struct wssl_rcv_return init_wssl_rcv(string wssl_msg, string id_sender, struct wssl_rcv_return rRet){
+/**
+ * Recover senderID and wsslMsg size from the message received from sender, remove the appended info and save the signed message
+ * @param wsslMsg Signed message received from the WSSL Sender
+ * @param senderID Sender identificator, also called label
+ * @param rRet ReceiverReturn object type containing the message and the receiver table
+ * @return The identification of the Sender (label)
+ * */
+std::string handle_msg(std::string wsslMsg, std::string senderID, ReceiverReturn &rRet){
 
-    //Starts library by calling the wssl_send_msg and updates the struct
-    rRet = wssl_rcv_msg(wssl_msg, id_sender, rRet);
+    senderID = wsslMsg.substr(SIZE_MSG, Rcv.sizeLabel);
+    // std::cout << senderID << std::endl;
+    int msgSize = wsslMsg.length();
+	rRet.plainText = wsslMsg.substr(SIZE_MSG + Rcv.sizeLabel, msgSize);
+    
+    return senderID;
+}
 
-    //The library return is the struct itself
+ReceiverReturn LibWssl::init_wssl_rcv(std::string wsslMsg, std::string path, ReceiverReturn rRet){
+
+    long int timeStamp = Rcv.get_time_stamp_micro();
+
+    delete_old_connexions_rcv(rRet);
+
+    std::string senderID;
+    senderID = handle_msg(wsslMsg, senderID, rRet);
+
+    // std::cout << "\nReceiveing from handle:" << rRet.plainText << std::endl;
+    // std::cout << "\nSender:" << senderID << std::endl;
+    
+    rRet = wssl_rcv_msg(rRet.plainText, senderID, path, timeStamp, rRet);
     return rRet;
 }
+
+void LibWssl::delete_old_connexions_rcv(ReceiverReturn rRet)
+{
+    //Delete connection if has passed 
+    float sec = 1000000;
+    long int timeNow = Rcv.get_time_stamp_micro();
+    
+    for (int i = 0; i < numConnect; i++)
+    {
+        if( (timeNow - rRet.table[i].timeStamp) / sec >= LIM_TIME_SEC){
+            for (int j = i; j< numConnect-1; j++){
+                rRet.table[j] = rRet.table[j+1];
+            }
+
+            std::cout << "Deleted message in position [" << i << "]" << std::endl;
+            numConnect --;
+            rRet.table->size = numConnect;
+            i--;
+        }
+    }
+}
+
+
 
