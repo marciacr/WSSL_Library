@@ -76,7 +76,7 @@ ReceiverReturn entity_safety_rcv(std::string safeMsg, std::string senderID, long
     }
     catch (std::invalid_argument const& ex)
     {
-        std::cout << "Invalid message syntax. You must not send the delimiter inside your message: " << std::endl;
+        std::cout << "[Warning] Invalid message syntax. You must not send the delimiter inside your message." << std::endl;
         safeMsg = "invalid message syntax";
         msgTimeStamp = -1;
         seqNumber = -1;
@@ -300,12 +300,21 @@ ReceiverReturn wssl_rcv_msg(std::string wsslMsg, std::string senderID, std::stri
  * @return The identification of the Sender (label)
  * */
 std::string handle_msg(std::string wsslMsg, std::string senderID, ReceiverReturn &rRet){
-
-    senderID = wsslMsg.substr(SIZE_MSG, Rcv.sizeLabel);
-    // std::cout << senderID << std::endl;
-    int msgSize = wsslMsg.length();
-	rRet.plainText = wsslMsg.substr(SIZE_MSG + Rcv.sizeLabel, msgSize);
     
+    try{
+        senderID = wsslMsg.substr(SIZE_MSG, Rcv.sizeLabel);
+        // std::cout << senderID << std::endl;
+        int msgSize = wsslMsg.length();
+        rRet.plainText = wsslMsg.substr(SIZE_MSG + Rcv.sizeLabel, msgSize);
+    }
+    catch (std::out_of_range const& ex)
+    {
+        std::cout << "[Warning] Invalid message syntax" << std::endl;
+        rRet.plainText = "error";
+        return rRet.plainText;
+        // throw std::invalid_argument("Invalid syntax. You must not send the delimiter inside your message");
+    }               
+  
     return senderID;
 }
 
@@ -320,9 +329,13 @@ ReceiverReturn LibWssl::init_wssl_rcv(std::string wsslMsg, std::string path, Rec
 
     // std::cout << "\nReceiveing from handle:" << rRet.plainText << std::endl;
     // std::cout << "\nSender:" << senderID << std::endl;
-    
-    rRet = wssl_rcv_msg(rRet.plainText, senderID, path, timeStamp, rRet);
-    return rRet;
+    if (senderID == "error"){
+        return rRet;
+    }else{
+        rRet = wssl_rcv_msg(rRet.plainText, senderID, path, timeStamp, rRet);
+        return rRet;
+    }
+
 }
 
 void LibWssl::delete_old_connexions_rcv(ReceiverReturn rRet)
@@ -338,7 +351,7 @@ void LibWssl::delete_old_connexions_rcv(ReceiverReturn rRet)
                 rRet.table[j] = rRet.table[j+1];
             }
 
-            std::cout << "Deleted message in position [" << i << "]" << std::endl;
+            std::cout << "[Debug] Deleted message in position [" << i << "]" << std::endl;
             numConnect --;
             rRet.table->size = numConnect;
             i--;
