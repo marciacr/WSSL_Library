@@ -42,8 +42,8 @@ ReceiverReturn entity_security_rcv(std::string wsslMsg, std::string senderID, st
 }
 
 /**
- * Safety Entity inside the _Receiver, responsible for removing and checking the message Time Stamp and Sequence Number
- * @param safeMsg Message recovered by security entity that contains the sequence number and time stamp
+ * Safety Entity inside the _Receiver, responsible for removing and checking the message timestamp and Sequence Number
+ * @param safeMsg Message recovered by security entity that contains the sequence number and timestamp
  * @param senderID Sender identificator, also called label
  * @param timeStamp Time the message was sent in microseconds 
  * @param rRet SenderReturn object
@@ -56,7 +56,7 @@ ReceiverReturn entity_safety_rcv(std::string safeMsg, std::string senderID, long
     std::string temp1;
     /**
      * Gets the position from the separators '|' inside the string:
-     * pos: Stores the '|' position separating the TimeStamp from the rest,
+     * pos: Stores the '|' position separating the timestamp from the rest,
      * temp1: Stores the string starting on position till the end,
      * pos2: Stores the '|' position separating Plain text from sequence number
      * */

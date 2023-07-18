@@ -216,7 +216,7 @@ public:
         sRet.table = new PacketSnd[SIZE_TABLE];
         if(sRet.table == nullptr)
             throw std::runtime_error("Sender Table could not allocate memory");
-        // sRet.table = (PacketSnd *)malloc(sizeof(PacketSnd)*SIZE_TABLE);
+
         memcpy(sRet.table,old.sRet.table,sizeof(old.sRet.table) );
         // sRet.table = old.sRet.table;
     }
@@ -233,7 +233,6 @@ public:
             if(sRet.table == nullptr)
                 throw std::runtime_error("Sender Table could not allocate memory");
             
-            // sRet.table = (PacketSnd *)malloc(sizeof(PacketSnd)*SIZE_TABLE);
             memcpy(sRet.table,other.sRet.table,sizeof(other.sRet.table));
         }
         return *this;
@@ -246,7 +245,6 @@ public:
     {
         sRet.table = new PacketSnd[SIZE_TABLE];
 
-        // sRet.table = (PacketSnd *)malloc(sizeof(PacketSnd)*SIZE_TABLE);
         if(sRet.table == nullptr)
             throw std::runtime_error("Sender Table could not allocate memory");
         
@@ -261,7 +259,6 @@ public:
 
         sRet.table = new PacketSnd[SIZE_TABLE];
 
-        // sRet.table = (PacketSnd *)malloc(sizeof(PacketSnd)*SIZE_TABLE);
         if(sRet.table == nullptr){
             throw std::runtime_error("Sender Table could not allocate memory");
         }
@@ -322,7 +319,6 @@ public:
         if(rRet.table == nullptr)
             throw std::runtime_error("Receiver Table could not allocate memory");
 
-        // rRet.table= old.rRet.table;
         memcpy(rRet.table,old.rRet.table,sizeof(old.rRet.table));
 
 
@@ -336,13 +332,11 @@ public:
             label = other.label;
             key = other.key;
 
-            // rRet.table = (PacketRcv *)malloc(sizeof(PacketRcv)*SIZE_TABLE);
             rRet.table = new PacketRcv[SIZE_TABLE];
 
             if(rRet.table == nullptr)
                 throw std::runtime_error("Receiver Table could not allocate memory");
                 
-            // rRet.table = other.rRet.table;
             memcpy(rRet.table,other.rRet.table,sizeof(other.rRet.table));
         }
         return *this;
@@ -353,7 +347,6 @@ public:
     :   path ("Default_Receiver"),
         label ("RCV1")
     {
-        // rRet.table = (PacketRcv *)malloc(sizeof(PacketRcv)*SIZE_TABLE);
         rRet.table = new PacketRcv[SIZE_TABLE];
         if(rRet.table == nullptr)
             throw std::runtime_error("Receiver Table could not allocate memory");
@@ -367,7 +360,7 @@ public:
         label (label)
     {
         rRet.table = new PacketRcv[SIZE_TABLE];
-        // rRet.table = (PacketRcv *)malloc(sizeof(PacketRcv)*SIZE_TABLE);
+        
         if(rRet.table == nullptr)
             throw std::runtime_error("Receiver Table could not allocate memory");
 
