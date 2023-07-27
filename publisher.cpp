@@ -46,7 +46,7 @@ int main()
     WsslSender Sender;                         // initialization by default constructor
     // WsslSender Sender2(Sender);                // initialization by copy constructor
     // WsslSender Sender3 = Sender2;               // Also initialization by copy constructor
-    WsslSender Sender4("senderFile", "SND1");    // initialization by parametized constructor
+    WsslSender Sender4("senderFile", "SND1");    // initialization by parameterized constructor
     Sender = Sender4;                           // Assignment by copy assignment operator
     
     // Sender.get_my_public_key(Sender.path);                   // Get your own public key in Sender.key
