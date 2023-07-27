@@ -10,7 +10,7 @@ using namespace std;
 // WsslReceiver Receiver4;                          // initialization by default constructor
 // WsslReceiver Receiver2(Receiver4);               // initialization by copy constructor
 // WsslReceiver Receiver3 = Receiver2;             // Also initialization by copy constructor
-WsslReceiver Receiver("rcvFile", "RCV1");   	// initialization by parametized constructor
+WsslReceiver Receiver("rcvFile", "RCV1");   	// initialization by parameterized constructor
 
 /* ------------------ Evaluation Purporse Only ------------------ */
 #define NUM_MSG 1
